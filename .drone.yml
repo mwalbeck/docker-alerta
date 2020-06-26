@@ -1,0 +1,58 @@
+---
+kind: pipeline
+name: build and publish
+
+steps:
+  - name: determine tags
+    image: bash
+    environment:
+      APP: "alerta/alerta-web"
+      DIR: ""
+      CUSTOM_TAGS: "latest,"
+    commands:
+      - apk add --no-cache grep
+      - VER=$(grep "FROM $${APP}:" $${DIR:-}Dockerfile)
+      - VER=$${VER##*:}
+      - VER=$${VER%-*}
+      - TAGS="$${CUSTOM_TAGS:-}"
+      - TAGS="$TAGS$VER,"
+      - VER=$${VER%.*}
+      - TAGS="$TAGS$VER,"
+      - VER=$${VER%.*}
+      - TAGS="$TAGS$VER"
+      - echo -n $TAGS > .tags
+      - cat .tags
+
+  - name: build and publish
+    image: plugins/docker
+    settings:
+      dockerfile: Dockerfile
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+      repo: docker.internal.walbeck.it/walbeck-it/alerta
+      registry: docker.internal.walbeck.it
+
+trigger:
+  branch:
+    - master
+  event:
+    - push
+
+---
+kind: pipeline
+name: test
+
+steps:
+  - name: build test
+    image: plugins/docker
+    settings:
+      dockerfile: Dockerfile
+      repo: docker.internal.walbeck.it/walbeck-it/alerta
+      registry: docker.internal.walbeck.it
+      dry_run: true
+
+trigger:
+  event:
+    - pull_request

@@ -1,5 +1,6 @@
 ---
 kind: pipeline
+type: docker
 name: build and publish
 
 steps:
@@ -58,6 +59,7 @@ trigger:
 
 ---
 kind: pipeline
+type: docker
 name: test
 
 steps:

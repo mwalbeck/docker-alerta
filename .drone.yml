@@ -30,11 +30,10 @@ steps:
     settings:
       dockerfile: Dockerfile
       username:
-        from_secret: docker_username
+        from_secret: dockerhub_username
       password:
-        from_secret: docker_password
-      repo: docker.internal.walbeck.it/walbeck-it/alerta
-      registry: docker.internal.walbeck.it
+        from_secret: dockerhub_password
+      repo: mwalbeck/alerta
 
   - name: notify
     image: plugins/matrix
@@ -67,8 +66,7 @@ steps:
     image: plugins/docker
     settings:
       dockerfile: Dockerfile
-      repo: docker.internal.walbeck.it/walbeck-it/alerta
-      registry: docker.internal.walbeck.it
+      repo: mwalbeck/alerta
       dry_run: true
 
 trigger:

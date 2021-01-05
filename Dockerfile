@@ -1,4 +1,4 @@
-FROM alerta/alerta-web:8.3.2@sha256:bf685dce66f901cd06025e37e68de77319f87e1acfab0a0f2b28082c51fb14f8
+FROM alerta/alerta-web:8.3.2@sha256:a1471caf6e6def4c2caa5a249cd4525efa3c3cddd9ca2b4db00022eb2914df3f
 
 RUN /venv/bin/pip install \
     git+https://git.walbeck.it/walbeck-it/matrix-alerta.git

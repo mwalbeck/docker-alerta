@@ -1,29 +1,33 @@
 ---
 kind: pipeline
 type: docker
+name: test
+
+steps:
+  - name: build test
+    image: plugins/docker
+    settings:
+      dockerfile: Dockerfile
+      repo: mwalbeck/alerta
+      dry_run: true
+
+trigger:
+  event:
+    - pull_request
+
+---
+kind: pipeline
+type: docker
 name: build and publish
 
 steps:
   - name: determine tags
-    image: bash
+    image: mwalbeck/determine-docker-tags
     environment:
-      APP: "alerta/alerta-web"
-      DIR: ""
-      CUSTOM_TAGS: "latest,"
-    commands:
-      - apk add --no-cache grep
-      - VER=$(grep "FROM $${APP}:" $${DIR:-}Dockerfile)
-      - VER=$${VER#*:}
-      - VER=$${VER%@*}
-      - VER=$${VER%-*}
-      - TAGS="$${CUSTOM_TAGS:-}"
-      - TAGS="$TAGS$VER,"
-      - VER=$${VER%.*}
-      - TAGS="$TAGS$VER,"
-      - VER=$${VER%.*}
-      - TAGS="$TAGS$VER"
-      - echo -n $TAGS > .tags
-      - echo $TAGS
+      VERSION_TYPE: "docker_from"
+      APP_NAME: "alerta/alerta-web"
+      DOCKERFILE_PATH: "Dockerfile"
+      CUSTOM_TAGS: "latest"
 
   - name: build and publish
     image: plugins/docker
@@ -55,20 +59,3 @@ trigger:
     - master
   event:
     - push
-
----
-kind: pipeline
-type: docker
-name: test
-
-steps:
-  - name: build test
-    image: plugins/docker
-    settings:
-      dockerfile: Dockerfile
-      repo: mwalbeck/alerta
-      dry_run: true
-
-trigger:
-  event:
-    - pull_request

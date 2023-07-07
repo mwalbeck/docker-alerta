@@ -70,22 +70,6 @@ steps:
         from_secret: dockerhub_password
       repo: mwalbeck/alerta
 
-  - name: notify
-    image: plugins/matrix
-    pull: if-not-exists
-    settings:
-      homeserver: https://matrix.mwalbeck.org
-      roomid:
-        from_secret: matrix_roomid
-      username:
-        from_secret: matrix_username
-      password:
-        from_secret: matrix_password
-    when:
-      status:
-        - success
-        - failure
-
 trigger:
   branch:
     - master
@@ -97,6 +81,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: d461989d7df96857881f22496eeeac1377e9bbc1cf93f3f77ffbd03c70b3c677
+hmac: a0500c5daefe455ba7f1d249f4595b1ca45b42b8f5a36d8803af7878dbd75d86
 
 ...

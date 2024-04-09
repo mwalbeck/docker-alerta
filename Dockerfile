@@ -1,4 +1,4 @@
-FROM alerta/alerta-web:9.0.1@sha256:74bb169ebdb04c6d76c2a92d9967228e3d069be670e1da2b3a7cdcbf509a76fb
+FROM alerta/alerta-web:9.0.2@sha256:52164b0fee9ffdf4a14d54c91a4044a6dec23473aa059ed3aeeccefd6aa999aa
 
 RUN /venv/bin/pip install \
     git+https://git.walbeck.it/walbeck-it/alerta-contrib.git#subdirectory=plugins/pushover

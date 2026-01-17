@@ -25,15 +25,10 @@ jobs:
           DOCKERFILE_PATH: "Dockerfile"
           CUSTOM_TAGS: "latest"
           INCLUDE_SUFFIX: "no"
-          IMAGE_NAME: "mwalbeck/alerta"
+          IMAGE_NAME: "git.walbeck.it/walbeck-it/alerta"
         run: |
           determine-docker-tags
           dockerd &
-      - name: Login to Docker Hub
-        uses: https://github.com/docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN_RO }}
       - name: Set up Docker Buildx
         uses: https://github.com/docker/setup-buildx-action@v3
       - name: Test build
